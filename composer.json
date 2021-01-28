@@ -1,0 +1,21 @@
+{
+    "name": "ayesh/markdown",
+    "description": "Parsedown extension with own magic.",
+    "type": "library",
+    "require": {
+        "erusev/parsedown": "^1.7",
+        "php": "^8.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Ayesh\\Markdown\\": "src/"
+        }
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Ayesh Karunaratne",
+            "email": "ayesh@aye.sh"
+        }
+    ]
+}
