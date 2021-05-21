@@ -28,6 +28,7 @@ class Markdown extends Parsedown {
                     'src' => $Link['element']['attributes']['href'],
                     'alt' => $Link['element']['text'],
                     'loading' => 'lazy',
+                    'decoding' => 'async',
                 ),
             ),
         );
