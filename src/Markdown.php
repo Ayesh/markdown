@@ -37,6 +37,31 @@ class Markdown extends Parsedown {
 
         unset($Inline['element']['attributes']['href']);
 
+	    if (!empty($Inline['element']['attributes']['title'])) {
+		    return [
+			    'extent' => $Link['extent'] + 1,
+			    'element' => [
+				    'name' => 'figure',
+				    'handler' => 'elements',
+				    'text' => [
+					    [
+						    'name' => 'img',
+						    'attributes' => [
+							    'src' => $Link['element']['attributes']['href'],
+							    'alt' => $Link['element']['text'],
+							    'loading' => 'lazy',
+							    'decoding' => 'async',
+						    ],
+					    ],
+					    [
+						    'name' => 'figcaption',
+						    'text' => $Inline['element']['attributes']['title']
+					    ],
+				    ],
+			    ],
+		    ];
+	    }
+
         return $Inline;
     }
 
