@@ -6,11 +6,11 @@ class Markdown {
     public const string version = '2.0.0';
 
     protected bool $breaksEnabled;
-    protected bool $markupEscaped;
+    protected bool $markupEscaped = false;
 
     protected bool $urlsLinked = true;
 
-    protected bool $safeMode;
+    protected bool $safeMode = false;
 
     protected array $safeLinksWhitelist = [
         'http://',
@@ -181,7 +181,7 @@ class Markdown {
     # ~
 
     protected string $inlineMarkerList = '!"*_&[:<>`~\\';
-    
+
     public function text($text): string {
         # make sure no definitions are set
         $this->DefinitionData = [];
@@ -202,7 +202,7 @@ class Markdown {
         return trim($markup, "\n");
     }
 
-    protected function setBreaksEnabled($breaksEnabled): static {
+    public function setBreaksEnabled($breaksEnabled): static {
         $this->breaksEnabled = $breaksEnabled;
         return $this;
     }
@@ -1061,7 +1061,7 @@ class Markdown {
     #
 
 
-    public function line($text, $nonNestables = []): string {
+    protected function line($text, $nonNestables = []): string {
         $markup = '';
 
         # $excerpt is based on the first occurrence of a marker
@@ -1552,10 +1552,6 @@ class Markdown {
     #
     # Deprecated Methods
     #
-
-    public function parse($text): string {
-        return $this->text($text);
-    }
 
     protected function sanitiseElement(array $Element): array {
         static $goodAttribute = '/^[a-zA-Z0-9][a-zA-Z0-9-_]*+$/';
