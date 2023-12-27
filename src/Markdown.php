@@ -277,10 +277,10 @@ class Markdown {
                     $CurrentBlock = $Block;
 
                     continue;
-                } else {
-                    if ($this->isBlockCompletable($CurrentBlock['type'])) {
-                        $CurrentBlock = $this->{'block' . $CurrentBlock['type'] . 'Complete'}($CurrentBlock);
-                    }
+                }
+
+                if ($this->isBlockCompletable($CurrentBlock['type'])) {
+                    $CurrentBlock = $this->{'block' . $CurrentBlock['type'] . 'Complete'}($CurrentBlock);
                 }
             }
 
@@ -1622,9 +1622,9 @@ class Markdown {
 
         if ($len > strlen($string)) {
             return false;
-        } else {
-            return strtolower(substr($string, 0, $len)) === strtolower($needle);
         }
+
+        return strtolower(substr($string, 0, $len)) === strtolower($needle);
     }
 
     static function instance($name = 'default') {
