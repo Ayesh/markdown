@@ -441,7 +441,7 @@ class Markdown {
                 'markup' => $Line['body'],
             ];
 
-            if (preg_match('/-->$/', $Line['text'])) {
+            if (str_ends_with($Line['text'], '-->')) {
                 $Block['closed'] = true;
             }
 
@@ -456,7 +456,7 @@ class Markdown {
 
         $Block['markup'] .= "\n" . $Line['body'];
 
-        if (preg_match('/-->$/', $Line['text'])) {
+        if (str_ends_with($Line['text'], '-->')) {
             $Block['closed'] = true;
         }
 
