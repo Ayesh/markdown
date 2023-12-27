@@ -4,12 +4,11 @@ namespace Ayesh\Markdown;
 
 class Markdown {
     public const string version = '2.0.0';
-
     protected bool $breaksEnabled;
     protected bool $markupEscaped = false;
     protected bool $urlsLinked = true;
     protected bool $safeMode = false;
-    protected array $safeLinksWhitelist = [
+    private const array safeLinksWhitelist = [
         'http://',
         'https://',
         'ftp://',
@@ -25,7 +24,7 @@ class Markdown {
         'news:',
         'steam:',
     ];
-    protected array $BlockTypes = [
+    protected const array BlockTypes = [
         '#' => ['Header'],
         '*' => ['Rule', 'List'],
         '+' => ['List'],
@@ -57,7 +56,7 @@ class Markdown {
     protected array $DefinitionData;
     #
     # Read-Only
-    protected array $specialCharacters = [
+    protected const array specialCharacters = [
         '\\',
         '`',
         '*',
@@ -77,19 +76,19 @@ class Markdown {
         '|',
     ];
 
-    protected array $StrongRegex = [
+    protected const array StrongRegex = [
         '*' => '/^[*]{2}((?:\\\\\*|[^*]|[*][^*]*[*])+?)[*]{2}(?![*])/s',
         '_' => '/^__((?:\\\\_|[^_]|_[^_]*_)+?)__(?!_)/us',
     ];
 
-    protected array $EmRegex = [
+    protected const array EmRegex = [
         '*' => '/^[*]((?:\\\\\*|[^*]|[*][*][^*]+?[*][*])+?)[*](?![*])/s',
         '_' => '/^_((?:\\\\_|[^_]|__[^_]*__)+?)_(?!_)\b/us',
     ];
 
-    protected string $regexHtmlAttribute = '[a-zA-Z_:][\w:.-]*(?:\s*=\s*(?:[^"\'=<>`\s]+|"[^"]*"|\'[^\']*\'))?';
+    protected const string regexHtmlAttribute = '[a-zA-Z_:][\w:.-]*(?:\s*=\s*(?:[^"\'=<>`\s]+|"[^"]*"|\'[^\']*\'))?';
 
-    protected array $voidElements = [
+    protected const array voidElements = [
         'area',
         'base',
         'br',
@@ -105,7 +104,7 @@ class Markdown {
         'source',
     ];
 
-    protected array $textLevelElements = [
+    protected const array textLevelElements = [
         'a',
         'br',
         'bdo',
@@ -148,13 +147,11 @@ class Markdown {
         'time',
     ];
 
-    # ~
-
-    protected array $unmarkedBlockTypes = [
+    protected const array unmarkedBlockTypes = [
         'Code',
     ];
 
-    protected array $InlineTypes = [
+    protected const array InlineTypes = [
         '"' => ['SpecialCharacter'],
         '!' => ['Image'],
         '&' => ['SpecialCharacter'],
@@ -168,8 +165,6 @@ class Markdown {
         '~' => ['Strikethrough'],
         '\\' => ['EscapeSequence'],
     ];
-
-    # ~
 
     protected string $inlineMarkerList = '!"*_&[:<>`~\\';
 
@@ -253,11 +248,7 @@ class Markdown {
 
             $text = $indent > 0 ? substr($line, $indent) : $line;
 
-            # ~
-
             $Line = ['body' => $line, 'indent' => $indent, 'text' => $text];
-
-            # ~
 
             if (isset($CurrentBlock['continuable'])) {
                 $Block = $this->{'block' . $CurrentBlock['type'] . 'Continue'}($Line, $CurrentBlock);
@@ -273,22 +264,15 @@ class Markdown {
                 }
             }
 
-            # ~
-
             $marker = $text[0];
 
-            # ~
+            $blockTypes = static::unmarkedBlockTypes;
 
-            $blockTypes = $this->unmarkedBlockTypes;
-
-            if (isset($this->BlockTypes[$marker])) {
-                foreach ($this->BlockTypes[$marker] as $blockType) {
+            if (isset(static::BlockTypes[$marker])) {
+                foreach (static::BlockTypes[$marker] as $blockType) {
                     $blockTypes [] = $blockType;
                 }
             }
-
-            #
-            # ~
 
             foreach ($blockTypes as $blockType) {
                 $Block = $this->{'block' . $blockType}($Line, $CurrentBlock);
@@ -312,7 +296,6 @@ class Markdown {
                 }
             }
 
-            # ~
 
             if (isset($CurrentBlock) and !isset($CurrentBlock['type']) and !isset($CurrentBlock['interrupted'])) {
                 $CurrentBlock['element']['text'] .= "\n" . $text;
@@ -325,19 +308,13 @@ class Markdown {
             }
         }
 
-        # ~
-
         if (isset($CurrentBlock['continuable']) and $this->isBlockCompletable($CurrentBlock['type'])) {
             $CurrentBlock = $this->{'block' . $CurrentBlock['type'] . 'Complete'}($CurrentBlock);
         }
 
-        # ~
-
         $Blocks [] = $CurrentBlock;
 
         unset($Blocks[0]);
-
-        # ~
 
         $markup = '';
 
@@ -351,8 +328,6 @@ class Markdown {
         }
 
         $markup .= "\n";
-
-        # ~
 
         return $markup;
     }
@@ -773,10 +748,10 @@ class Markdown {
             return;
         }
 
-        if (preg_match('/^<(\w[\w-]*)(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*(\/)?>/', $Line['text'], $matches)) {
+        if (preg_match('/^<(\w[\w-]*)(?:[ ]*' . static::regexHtmlAttribute . ')*[ ]*(\/)?>/', $Line['text'], $matches)) {
             $element = strtolower($matches[1]);
 
-            if (in_array($element, $this->textLevelElements)) {
+            if (in_array($element, static::textLevelElements)) {
                 return;
             }
 
@@ -791,13 +766,13 @@ class Markdown {
             $remainder = substr($Line['text'], $length);
 
             if (trim($remainder) === '') {
-                if (isset($matches[2]) or in_array($matches[1], $this->voidElements)) {
+                if (isset($matches[2]) or in_array($matches[1], static::voidElements)) {
                     $Block['closed'] = true;
 
                     $Block['void'] = true;
                 }
             } else {
-                if (isset($matches[2]) or in_array($matches[1], $this->voidElements)) {
+                if (isset($matches[2]) or in_array($matches[1], static::voidElements)) {
                     return;
                 }
 
@@ -816,7 +791,7 @@ class Markdown {
         }
 
         if (preg_match(
-            '/^<' . $Block['name'] . '(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*>/i',
+            '/^<' . $Block['name'] . '(?:[ ]*' . static::regexHtmlAttribute . ')*[ ]*>/i',
             $Line['text']
         )) # open
         {
@@ -905,8 +880,6 @@ class Markdown {
                 $alignments [] = $alignment;
             }
 
-            # ~
-
             $HeaderElements = [];
 
             $header = $Block['element']['text'];
@@ -935,8 +908,6 @@ class Markdown {
 
                 $HeaderElements [] = $HeaderElement;
             }
-
-            # ~
 
             $Block = [
                 'alignments' => $alignments,
@@ -1033,10 +1004,6 @@ class Markdown {
         }
     }
 
-    #
-    # ~
-    #
-
     protected function paragraph($Line): array {
         return [
             'element' => [
@@ -1064,7 +1031,7 @@ class Markdown {
 
             $Excerpt = ['text' => $excerpt, 'context' => $text];
 
-            foreach ($this->InlineTypes[$marker] as $inlineType) {
+            foreach (static::InlineTypes[$marker] as $inlineType) {
                 # check to see if the current inline type is nestable in the current context
 
                 if (!empty($nonNestables) && in_array($inlineType, $nonNestables)) {
@@ -1124,10 +1091,6 @@ class Markdown {
         return $markup;
     }
 
-    #
-    # ~
-    #
-
     protected function inlineCode($Excerpt) {
         $marker = $Excerpt['text'][0];
 
@@ -1181,9 +1144,9 @@ class Markdown {
 
         $marker = $Excerpt['text'][0];
 
-        if ($Excerpt['text'][1] === $marker and preg_match($this->StrongRegex[$marker], $Excerpt['text'], $matches)) {
+        if ($Excerpt['text'][1] === $marker and preg_match(static::StrongRegex[$marker], $Excerpt['text'], $matches)) {
             $emphasis = 'strong';
-        } elseif (preg_match($this->EmRegex[$marker], $Excerpt['text'], $matches)) {
+        } elseif (preg_match(static::EmRegex[$marker], $Excerpt['text'], $matches)) {
             $emphasis = 'em';
         } else {
             return;
@@ -1200,7 +1163,7 @@ class Markdown {
     }
 
     protected function inlineEscapeSequence($Excerpt) {
-        if (isset($Excerpt['text'][1]) and in_array($Excerpt['text'][1], $this->specialCharacters)) {
+        if (isset($Excerpt['text'][1]) && in_array($Excerpt['text'][1], static::specialCharacters)) {
             return [
                 'markup' => $Excerpt['text'][1],
                 'extent' => 2,
@@ -1350,7 +1313,7 @@ class Markdown {
         }
 
         if ($Excerpt['text'][1] !== ' ' and preg_match(
-                '/^<\w[\w-]*(?:[ ]*' . $this->regexHtmlAttribute . ')*[ ]*\/?>/s',
+                '/^<\w[\w-]*(?:[ ]*' . static::regexHtmlAttribute . ')*[ ]*\/?>/s',
                 $Excerpt['text'],
                 $matches
             )) {
@@ -1439,8 +1402,6 @@ class Markdown {
         }
     }
 
-    # ~
-
     protected function unmarkedText($text): string {
         if ($this->breaksEnabled) {
             $text = preg_replace('/[ ]*\n/', "<br />\n", $text);
@@ -1521,8 +1482,6 @@ class Markdown {
         return $markup;
     }
 
-    # ~
-
     protected function li($lines) {
         $markup = $this->lines($lines);
 
@@ -1571,7 +1530,7 @@ class Markdown {
     }
 
     protected function filterUnsafeUrlInAttribute(array $Element, $attribute): array {
-        foreach ($this->safeLinksWhitelist as $scheme) {
+        foreach (staticL::safeLinksWhitelist as $scheme) {
             if (self::striAtStart($Element['attributes'][$attribute], $scheme)) {
                 return $Element;
             }
