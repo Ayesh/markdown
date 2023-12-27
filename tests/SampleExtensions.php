@@ -1,10 +1,10 @@
 <?php
 
-namespace test;
+namespace Ayesh\Markdown\Tests;
 
-use Parsedown;
+use Ayesh\Markdown\Markdown;
 
-class UnsafeExtension extends Parsedown {
+class UnsafeExtension extends Markdown {
     protected function blockFencedCodeComplete($Block) {
         $text = $Block['element']['element']['text'];
         unset($Block['element']['element']['text']);
@@ -21,7 +21,7 @@ class UnsafeExtension extends Parsedown {
 }
 
 
-class TrustDelegatedExtension extends Parsedown {
+class TrustDelegatedExtension extends Markdown {
     protected function blockFencedCodeComplete($Block) {
         $text = $Block['element']['element']['text'];
         unset($Block['element']['element']['text']);

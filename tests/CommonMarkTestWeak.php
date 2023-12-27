@@ -21,7 +21,7 @@ require_once(__DIR__ . '/CommonMarkTestStrict.php');
 class CommonMarkTestWeak extends CommonMarkTestStrict {
     protected $textLevelElementRegex;
 
-    protected function setUp() {
+    protected function setUp(): void {
         parent::setUp();
 
         $textLevelElements = $this->parsedown->getTextLevelElements();
@@ -39,7 +39,7 @@ class CommonMarkTestWeak extends CommonMarkTestStrict {
      * @param $markdown
      * @param $expectedHtml
      */
-    public function testExample($id, $section, $markdown, $expectedHtml) {
+    public function testExample($id, $section, $markdown, $expectedHtml): void {
         $expectedHtml = $this->cleanupHtml($expectedHtml);
 
         $actualHtml = $this->parsedown->text($markdown);

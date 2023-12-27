@@ -15,11 +15,3 @@
 # closed h1 #
 
 #
-
-##
-
-# # of levels
-
-# # of levels # #
-
-#heading

@@ -2,21 +2,23 @@
 
 namespace Ayesh\Markdown\Tests;
 
-use PHPUnit_Framework_TestCase;
-use test\TestParsedown;
+use Ayesh\Markdown\Markdown;
+use Markdown as TestParsedown;
+use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * Test Parsedown against the CommonMark spec
  *
  * @link http://commonmark.org/ CommonMark
  */
-class CommonMarkTestStrict extends PHPUnit_Framework_TestCase {
+class CommonMarkTestStrict extends TestCase {
     const SPEC_URL = 'https://raw.githubusercontent.com/jgm/CommonMark/master/spec.txt';
 
     protected $parsedown;
 
-    protected function setUp() {
-        $this->parsedown = new TestParsedown();
+    protected function setUp(): void {
+        $this->parsedown = new Markdown();
         $this->parsedown->setUrlsLinked(false);
     }
 
@@ -28,7 +30,7 @@ class CommonMarkTestStrict extends PHPUnit_Framework_TestCase {
      * @param $markdown
      * @param $expectedHtml
      */
-    public function testExample($id, $section, $markdown, $expectedHtml) {
+    public function testExample($id, $section, $markdown, $expectedHtml): void {
         $actualHtml = $this->parsedown->text($markdown);
         $this->assertEquals($expectedHtml, $actualHtml);
     }
@@ -36,10 +38,11 @@ class CommonMarkTestStrict extends PHPUnit_Framework_TestCase {
     /**
      * @return array
      */
-    public function data() {
+    public static function data(): array {
         $spec = file_get_contents(self::SPEC_URL);
+
         if ($spec === false) {
-            $this->fail('Unable to load CommonMark spec from ' . self::SPEC_URL);
+            throw new RuntimeException('Unable to load CommonMark spec from ' . self::SPEC_URL);
         }
 
         $spec = str_replace("\r\n", "\n", $spec);

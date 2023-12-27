@@ -2,41 +2,39 @@
 
 namespace Ayesh\Markdown\Tests;
 
-require 'SampleExtensions.php';
+require __DIR__ . '/SampleExtensions.php';
 
-use Parsedown;
+use Ayesh\Markdown\Markdown;
+use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
-use test\TestParsedown;
-use test\TrustDelegatedExtension;
-use UnsafeExtension;
 
 class ParsedownTest extends TestCase {
+
+    protected static array $dirs = [];
+
     final function __construct($name = null, array $data = [], $dataName = '') {
-        $this->dirs = $this->initDirs();
+        self::$dirs = static::initDirs();
         $this->Parsedown = $this->initParsedown();
 
         parent::__construct($name, $data, $dataName);
     }
 
-    private $dirs;
     protected $Parsedown;
 
     /**
      * @return array
      */
-    protected function initDirs() {
-        $dirs [] = dirname(__FILE__) . '/data/';
+    protected static function initDirs(): array {
+        $dirs [] = __DIR__ . '/data/';
 
         return $dirs;
     }
 
     /**
-     * @return Parsedown
+     * @return Markdown
      */
-    protected function initParsedown() {
-        $Parsedown = new TestParsedown();
-
-        return $Parsedown;
+    protected function initParsedown(): Markdown {
+        return new Markdown();
     }
 
     /**
@@ -45,7 +43,7 @@ class ParsedownTest extends TestCase {
      * @param $test
      * @param $dir
      */
-    function test_($test, $dir) {
+    function test_($test, $dir): void {
         $markdown = file_get_contents($dir . $test . '.md');
 
         $expectedMarkup = file_get_contents($dir . $test . '.html');
@@ -54,14 +52,13 @@ class ParsedownTest extends TestCase {
         $expectedMarkup = str_replace("\r", "\n", $expectedMarkup);
 
         $this->Parsedown->setSafeMode(substr($test, 0, 3) === 'xss');
-        $this->Parsedown->setStrictMode(substr($test, 0, 6) === 'strict');
 
         $actualMarkup = $this->Parsedown->text($markdown);
 
         $this->assertEquals($expectedMarkup, $actualMarkup);
     }
 
-    function testRawHtml() {
+    function testRawHtml(): void {
         $markdown = "```php\nfoobar\n```";
         $expectedMarkup = '<pre><code class="language-php"><p>foobar</p></code></pre>';
         $expectedSafeMarkup = '<pre><code class="language-php">&lt;p&gt;foobar&lt;/p&gt;</code></pre>';
@@ -77,7 +74,7 @@ class ParsedownTest extends TestCase {
         $this->assertEquals($expectedSafeMarkup, $actualSafeMarkup);
     }
 
-    function testTrustDelegatedRawHtml() {
+    function testTrustDelegatedRawHtml(): void {
         $markdown = "```php\nfoobar\n```";
         $expectedMarkup = '<pre><code class="language-php"><p>foobar</p></code></pre>';
         $expectedSafeMarkup = $expectedMarkup;
@@ -93,15 +90,14 @@ class ParsedownTest extends TestCase {
         $this->assertEquals($expectedSafeMarkup, $actualSafeMarkup);
     }
 
-    function data() {
+    public static function data(): array {
         $data = [];
+        $dirs = static::initDirs();
 
-        foreach ($this->dirs as $dir) {
+        foreach ($dirs as $dir) {
             $Folder = new DirectoryIterator($dir);
 
             foreach ($Folder as $File) {
-                /** @var $File DirectoryIterator */
-
                 if (!$File->isFile()) {
                     continue;
                 }
@@ -125,7 +121,7 @@ class ParsedownTest extends TestCase {
         return $data;
     }
 
-    public function test_no_markup() {
+    public function test_no_markup(): void {
         $markdownWithHtml = <<<MARKDOWN_WITH_MARKUP
 <div>_content_</div>
 
@@ -168,25 +164,25 @@ color: red;
 <p>&lt;!-- html comment --&gt;</p>
 EXPECTED_HTML;
 
-        $parsedownWithNoMarkup = new TestParsedown();
+        $parsedownWithNoMarkup = new Markdown();
         $parsedownWithNoMarkup->setMarkupEscaped(true);
         $this->assertEquals($expectedHtml, $parsedownWithNoMarkup->text($markdownWithHtml));
     }
 
-    public function testLateStaticBinding() {
-        $parsedown = Parsedown::instance();
-        $this->assertInstanceOf('Parsedown', $parsedown);
+    public function testLateStaticBinding(): void {
+        $parsedown = Markdown::instance();
+        $this->assertInstanceOf(Markdown::class, $parsedown);
 
         // After instance is already called on Parsedown
         // subsequent calls with the same arguments return the same instance
-        $sameParsedown = TestParsedown::instance();
-        $this->assertInstanceOf('Parsedown', $sameParsedown);
+        $sameParsedown = Markdown::instance();
+        $this->assertInstanceOf(Markdown::class, $sameParsedown);
         $this->assertSame($parsedown, $sameParsedown);
 
-        $testParsedown = TestParsedown::instance('test late static binding');
-        $this->assertInstanceOf('TestParsedown', $testParsedown);
+        $testParsedown = Markdown::instance('test late static binding');
+        $this->assertInstanceOf(Markdown::class, $testParsedown);
 
-        $sameInstanceAgain = TestParsedown::instance('test late static binding');
+        $sameInstanceAgain = Markdown::instance('test late static binding');
         $this->assertSame($testParsedown, $sameInstanceAgain);
     }
 }
