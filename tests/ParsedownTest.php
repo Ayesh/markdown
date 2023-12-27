@@ -51,7 +51,7 @@ class ParsedownTest extends TestCase {
         $expectedMarkup = str_replace("\r\n", "\n", $expectedMarkup);
         $expectedMarkup = str_replace("\r", "\n", $expectedMarkup);
 
-        $this->Parsedown->setSafeMode(substr($test, 0, 3) === 'xss');
+        $this->Parsedown->setSafeMode(str_starts_with($test, 'xss'));
 
         $actualMarkup = $this->Parsedown->text($markdown);
 

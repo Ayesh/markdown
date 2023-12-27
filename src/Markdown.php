@@ -611,7 +611,7 @@ class Markdown {
             ];
 
             if ($name === 'ol') {
-                $listStart = stristr($matches[0], '.', true);
+                $listStart = strstr($matches[0], '.', true);
 
                 if ($listStart !== '1') {
                     $Block['element']['attributes'] = ['start' => $listStart];
@@ -876,11 +876,9 @@ class Markdown {
 
             $this->DefinitionData['Reference'][$id] = $Data;
 
-            $Block = [
+            return [
                 'hidden' => true,
             ];
-
-            return $Block;
         }
     }
 
@@ -1549,7 +1547,7 @@ class Markdown {
 
         $trimmedMarkup = trim($markup);
 
-        if (!in_array('', $lines) and substr($trimmedMarkup, 0, 3) === '<p>') {
+        if (!in_array('', $lines) and str_starts_with($trimmedMarkup, '<p>')) {
             $markup = $trimmedMarkup;
             $markup = substr($markup, 3);
 
@@ -1566,9 +1564,7 @@ class Markdown {
     #
 
     function parse($text): string {
-        $markup = $this->text($text);
-
-        return $markup;
+        return $this->text($text);
     }
 
     protected function sanitiseElement(array $Element): array {
@@ -1624,7 +1620,7 @@ class Markdown {
             return false;
         }
 
-        return strtolower(substr($string, 0, $len)) === strtolower($needle);
+        return stripos($string, strtolower($needle)) === 0;
     }
 
     static function instance($name = 'default') {
