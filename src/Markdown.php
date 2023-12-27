@@ -7,11 +7,8 @@ class Markdown {
 
     protected bool $breaksEnabled;
     protected bool $markupEscaped = false;
-
     protected bool $urlsLinked = true;
-
     protected bool $safeMode = false;
-
     protected array $safeLinksWhitelist = [
         'http://',
         'https://',
@@ -28,7 +25,6 @@ class Markdown {
         'news:',
         'steam:',
     ];
-
     protected array $BlockTypes = [
         '#' => ['Header'],
         '*' => ['Rule', 'List'],
@@ -54,18 +50,13 @@ class Markdown {
         '|' => ['Table'],
         '~' => ['FencedCode'],
     ];
-
     private static array $instances = [];
-
     #
     # Fields
     #
-
     protected array $DefinitionData;
-
     #
     # Read-Only
-
     protected array $specialCharacters = [
         '\\',
         '`',
