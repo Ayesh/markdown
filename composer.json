@@ -11,6 +11,11 @@
             "Ayesh\\Markdown\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Ayesh\\Markdown\\Tests\\": "tests"
+        }
+    },
     "license": "MIT",
     "authors": [
         {
