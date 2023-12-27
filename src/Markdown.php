@@ -182,7 +182,7 @@ class Markdown {
 
     protected $inlineMarkerList = '!"*_&[:<>`~\\';
     
-    public function text($text) {
+    public function text($text): string {
         # make sure no definitions are set
         $this->DefinitionData = [];
 
@@ -210,17 +210,17 @@ class Markdown {
     }
 
 
-    function setMarkupEscaped($markupEscaped) {
+    function setMarkupEscaped($markupEscaped): Markdown {
         $this->markupEscaped = $markupEscaped;
         return $this;
     }
 
-    function setUrlsLinked($urlsLinked) {
+    function setUrlsLinked($urlsLinked): Markdown {
         $this->urlsLinked = $urlsLinked;
         return $this;
     }
 
-    function setSafeMode($safeMode) {
+    function setSafeMode($safeMode): Markdown {
         $this->safeMode = (bool)$safeMode;
         return $this;
     }
@@ -229,11 +229,11 @@ class Markdown {
     # Blocks
     #
 
-    protected function lines(array $lines) {
+    protected function lines(array $lines): string {
         $CurrentBlock = null;
 
         foreach ($lines as $line) {
-            if (chop($line) === '') {
+            if (rtrim($line) === '') {
                 if (isset($CurrentBlock)) {
                     $CurrentBlock['interrupted'] = true;
                 }
@@ -368,11 +368,11 @@ class Markdown {
         return $markup;
     }
 
-    protected function isBlockContinuable($Type) {
+    protected function isBlockContinuable($Type): bool {
         return method_exists($this, 'block' . $Type . 'Continue');
     }
 
-    protected function isBlockCompletable($Type) {
+    protected function isBlockCompletable($Type): bool {
         return method_exists($this, 'block' . $Type . 'Complete');
     }
 
@@ -420,7 +420,7 @@ class Markdown {
         }
     }
 
-    protected function blockCodeComplete($Block) {
+    protected function blockCodeComplete($Block): array {
         $text = $Block['element']['text']['text'];
 
         $Block['element']['text']['text'] = $text;
@@ -688,7 +688,7 @@ class Markdown {
         }
     }
 
-    protected function blockListComplete(array $Block) {
+    protected function blockListComplete(array $Block): array {
         if (isset($Block['loose'])) {
             foreach ($Block['element']['text'] as &$li) {
                 if (end($li['text']) !== '') {
@@ -1054,7 +1054,7 @@ class Markdown {
     # ~
     #
 
-    protected function paragraph($Line) {
+    protected function paragraph($Line): array {
         $Block = [
             'element' => [
                 'name' => 'p',
@@ -1071,7 +1071,7 @@ class Markdown {
     #
 
 
-    public function line($text, $nonNestables = []) {
+    public function line($text, $nonNestables = []): string {
         $markup = '';
 
         # $excerpt is based on the first occurrence of a marker
@@ -1477,7 +1477,7 @@ class Markdown {
     # Handlers
     #
 
-    protected function element(array $Element) {
+    protected function element(array $Element): string {
         if ($this->safeMode) {
             $Element = $this->sanitiseElement($Element);
         }
@@ -1530,7 +1530,7 @@ class Markdown {
         return $markup;
     }
 
-    protected function elements(array $Elements) {
+    protected function elements(array $Elements): string {
         $markup = '';
 
         foreach ($Elements as $Element) {
@@ -1565,13 +1565,13 @@ class Markdown {
     # Deprecated Methods
     #
 
-    function parse($text) {
+    function parse($text): string {
         $markup = $this->text($text);
 
         return $markup;
     }
 
-    protected function sanitiseElement(array $Element) {
+    protected function sanitiseElement(array $Element): array {
         static $goodAttribute = '/^[a-zA-Z0-9][a-zA-Z0-9-_]*+$/';
         static $safeUrlNameToAtt = [
             'a' => 'href',
@@ -1597,7 +1597,7 @@ class Markdown {
         return $Element;
     }
 
-    protected function filterUnsafeUrlInAttribute(array $Element, $attribute) {
+    protected function filterUnsafeUrlInAttribute(array $Element, $attribute): array {
         foreach ($this->safeLinksWhitelist as $scheme) {
             if (self::striAtStart($Element['attributes'][$attribute], $scheme)) {
                 return $Element;
@@ -1613,11 +1613,11 @@ class Markdown {
     # Static Methods
     #
 
-    protected static function escape($text, $allowQuotes = false) {
+    protected static function escape($text, $allowQuotes = false): string {
         return htmlspecialchars($text, $allowQuotes ? ENT_NOQUOTES : ENT_QUOTES, 'UTF-8');
     }
 
-    protected static function striAtStart($string, $needle) {
+    protected static function striAtStart($string, $needle): ?bool {
         $len = strlen($needle);
 
         if ($len > strlen($string)) {
