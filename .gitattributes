@@ -3,6 +3,7 @@
 # Exclude build/test files from archive
 /tests            export-ignore
 /.gitattributes   export-ignore
+/.github          export-ignore
 /.gitignore       export-ignore
 /phpunit.xml.dist export-ignore
 /README.md        export-ignore
