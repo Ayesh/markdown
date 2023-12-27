@@ -3,7 +3,6 @@
 namespace Ayesh\Markdown;
 
 use Parsedown;
-
 class Markdown extends Parsedown {
 
     protected function inlineImage($Excerpt): ?array {
@@ -161,7 +160,7 @@ class Markdown extends Parsedown {
             return;
         }
 
-        if (strpos($Block['element']['text'], '|') !== false and chop($Line['text'], ' -:|') === '')
+        if (strpos($Block['element']['text'], '|') !== false and rtrim($Line['text'], ' -:|') === '')
         {
             $alignments = array();
 
