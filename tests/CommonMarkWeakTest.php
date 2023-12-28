@@ -2,8 +2,6 @@
 
 namespace Ayesh\Markdown\Tests;
 
-require_once(__DIR__ . '/CommonMarkStrictTest.php');
-
 /**
  * Test Markdown against the CommonMark spec, but less aggressive
  *
@@ -32,12 +30,12 @@ class CommonMarkWeakTest extends CommonMarkStrictTest {
     /**
      * @dataProvider data
      *
-     * @param string $id
+     * @param int $id
      * @param string $section
      * @param string $markdown
      * @param string $expectedHtml
      */
-    public function testExample(string $id, string $section, string $markdown, string $expectedHtml): void {
+    public function testExample(int $id, string $section, string $markdown, string $expectedHtml): void {
         $actualHtml = $this->markdown->text($markdown);
         $this->assertEquals($this->cleanupHtml($expectedHtml), $this->cleanupHtml($actualHtml));
     }

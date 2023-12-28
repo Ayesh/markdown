@@ -2,8 +2,6 @@
 
 namespace Ayesh\Markdown\Tests;
 
-require __DIR__ . '/SampleExtensions.php';
-
 use Ayesh\Markdown\Markdown;
 use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
@@ -13,7 +11,7 @@ class MarkdownTest extends TestCase {
     protected static array $dirs = [];
     protected Markdown $markdown;
 
-    final function __construct($name = null, array $data = [], $dataName = '') {
+    final public function __construct($name = null, array $data = [], $dataName = '') {
         self::$dirs = static::initDirs();
         $this->markdown = $this->initMarkdown();
 
@@ -63,7 +61,7 @@ class MarkdownTest extends TestCase {
         $expectedMarkup = '<pre><code class="language-php">foobar</code></pre>';
         $expectedSafeMarkup = '<pre><code class="language-php">foobar</code></pre>';
 
-        $unsafeExtension = new UnsafeExtension;
+        $unsafeExtension = new SampleExtensions;
         $actualMarkup = $unsafeExtension->text($markdown);
 
         $this->assertEquals($expectedMarkup, $actualMarkup);
@@ -79,7 +77,7 @@ class MarkdownTest extends TestCase {
         $expectedMarkup = '<pre><code class="language-php">foobar</code></pre>';
         $expectedSafeMarkup = $expectedMarkup;
 
-        $unsafeExtension = new TrustDelegatedExtension;
+        $unsafeExtension = new TrustDelegatedExtension();
         $actualMarkup = $unsafeExtension->text($markdown);
 
         $this->assertEquals($expectedMarkup, $actualMarkup);
