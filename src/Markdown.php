@@ -4,7 +4,7 @@ namespace Ayesh\Markdown;
 
 class Markdown {
     public const string version = '2.0.0';
-    protected bool $breaksEnabled;
+    protected bool $breaksEnabled = false;
     protected bool $markupEscaped = false;
     protected bool $urlsLinked = true;
     protected bool $safeMode = false;
@@ -1019,7 +1019,7 @@ class Markdown {
     #
 
 
-    protected function line($text, $nonNestables = []): string {
+    public function line($text, $nonNestables = []): string {
         $markup = '';
 
         # $excerpt is based on the first occurrence of a marker
@@ -1530,7 +1530,7 @@ class Markdown {
     }
 
     protected function filterUnsafeUrlInAttribute(array $Element, $attribute): array {
-        foreach (staticL::safeLinksWhitelist as $scheme) {
+        foreach (static::safeLinksWhitelist as $scheme) {
             if (self::striAtStart($Element['attributes'][$attribute], $scheme)) {
                 return $Element;
             }
