@@ -2,6 +2,7 @@
 
 namespace Ayesh\Markdown\Tests;
 
+use Ayesh\Markdown\Markdown;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
@@ -12,7 +13,7 @@ use RuntimeException;
  */
 class CommonMarkStrictTest extends TestCase {
     protected const string SPEC_URL = 'https://raw.githubusercontent.com/jgm/CommonMark/master/spec.txt';
-    protected $markdown;
+    protected Markdown $markdown;
 
     protected function setUp(): void {
         $this->markdown = new TestMarkdown();
@@ -22,12 +23,12 @@ class CommonMarkStrictTest extends TestCase {
     /**
      * @dataProvider data
      *
-     * @param $id
-     * @param $section
-     * @param $markdown
-     * @param $expectedHtml
+     * @param string $id
+     * @param string $section
+     * @param string $markdown
+     * @param string $expectedHtml
      */
-    public function testExample($id, $section, $markdown, $expectedHtml): void {
+    public function testExample(string $id, string $section, string $markdown, string $expectedHtml): void {
         $actualHtml = $this->markdown->text($markdown);
         $this->assertEquals($expectedHtml, $actualHtml);
     }
