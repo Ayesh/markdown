@@ -2,9 +2,7 @@
 
 namespace Ayesh\Markdown\Tests;
 
-use test\CommonMarkTestStrict;
-
-require_once(__DIR__ . '/CommonMarkTestStrict.php');
+require_once(__DIR__ . '/CommonMarkStrictTest.php');
 
 /**
  * Test Parsedown against the CommonMark spec, but less aggressive
@@ -18,7 +16,7 @@ require_once(__DIR__ . '/CommonMarkTestStrict.php');
  *
  * @link http://commonmark.org/ CommonMark
  */
-class CommonMarkTestWeak extends CommonMarkTestStrict {
+class CommonMarkWeakTest extends CommonMarkStrictTest {
     protected $textLevelElementRegex;
 
     protected function setUp(): void {

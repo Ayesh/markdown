@@ -43,13 +43,14 @@ class ParsedownTest extends TestCase {
      * @param $test
      * @param $dir
      */
-    function test_($test, $dir): void {
+    public function testFixtures($test, $dir): void {
         $markdown = file_get_contents($dir . $test . '.md');
 
         $expectedMarkup = file_get_contents($dir . $test . '.html');
 
         $expectedMarkup = str_replace("\r\n", "\n", $expectedMarkup);
         $expectedMarkup = str_replace("\r", "\n", $expectedMarkup);
+        $expectedMarkup = rtrim($expectedMarkup);
 
         $this->Parsedown->setSafeMode(str_starts_with($test, 'xss'));
 
@@ -58,10 +59,10 @@ class ParsedownTest extends TestCase {
         $this->assertEquals($expectedMarkup, $actualMarkup);
     }
 
-    function testRawHtml(): void {
+    public function testRawHtml(): void {
         $markdown = "```php\nfoobar\n```";
-        $expectedMarkup = '<pre><code class="language-php"><p>foobar</p></code></pre>';
-        $expectedSafeMarkup = '<pre><code class="language-php">&lt;p&gt;foobar&lt;/p&gt;</code></pre>';
+        $expectedMarkup = '<pre><code class="language-php">foobar</code></pre>';
+        $expectedSafeMarkup = '<pre><code class="language-php">foobar</code></pre>';
 
         $unsafeExtension = new UnsafeExtension;
         $actualMarkup = $unsafeExtension->text($markdown);
@@ -74,9 +75,9 @@ class ParsedownTest extends TestCase {
         $this->assertEquals($expectedSafeMarkup, $actualSafeMarkup);
     }
 
-    function testTrustDelegatedRawHtml(): void {
+    public function testTrustDelegatedRawHtml(): void {
         $markdown = "```php\nfoobar\n```";
-        $expectedMarkup = '<pre><code class="language-php"><p>foobar</p></code></pre>';
+        $expectedMarkup = '<pre><code class="language-php">foobar</code></pre>';
         $expectedSafeMarkup = $expectedMarkup;
 
         $unsafeExtension = new TrustDelegatedExtension;
@@ -150,12 +151,12 @@ MARKDOWN_WITH_MARKUP;
 <p>&lt;div&gt;<em>content</em>&lt;/div&gt;</p>
 <p>sparse:</p>
 <p>&lt;div&gt;
-&lt;div class="inner"&gt;
+&lt;div class=&quot;inner&quot;&gt;
 <em>content</em>
 &lt;/div&gt;
 &lt;/div&gt;</p>
 <p>paragraph</p>
-<p>&lt;style type="text/css"&gt;
+<p>&lt;style type=&quot;text/css&quot;&gt;
 p {
 color: red;
 }

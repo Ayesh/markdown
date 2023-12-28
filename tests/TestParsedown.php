@@ -2,9 +2,9 @@
 
 namespace Ayesh\Markdown\Tests;
 
-use Parsedown;
+use Ayesh\Markdown\Markdown;
 
-class TestParsedown extends Parsedown {
+class TestParsedown extends Markdown {
     public function getTextLevelElements() {
         return $this->textLevelElements;
     }

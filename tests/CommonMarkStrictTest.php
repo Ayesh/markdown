@@ -11,13 +11,13 @@ use RuntimeException;
  *
  * @link http://commonmark.org/ CommonMark
  */
-class CommonMarkTestStrict extends TestCase {
+class CommonMarkStrictTest extends TestCase {
     const SPEC_URL = 'https://raw.githubusercontent.com/jgm/CommonMark/master/spec.txt';
 
     protected $parsedown;
 
     protected function setUp(): void {
-        $this->parsedown = new Markdown();
+        $this->parsedown = new TestParsedown();
         $this->parsedown->setUrlsLinked(false);
     }
 
