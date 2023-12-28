@@ -535,7 +535,7 @@ class Markdown {
                     '',
                     trim($text)
                 ) . '</a>';
-        } elseif (preg_match('/{#([A-z\d_.-]+)}$/', $text, $matches)) {
+        } elseif (preg_match('/{#([A-Za-z\d_.-]+)}$/', $text, $matches)) {
             $h_id = $matches[1];
             $text = '<a href="#' . $matches[1] . '" class="anchor">' . str_replace(
                     $matches[0],
