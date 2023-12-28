@@ -8,18 +8,17 @@ use Ayesh\Markdown\Markdown;
 use DirectoryIterator;
 use PHPUnit\Framework\TestCase;
 
-class ParsedownTest extends TestCase {
+class MarkdownTest extends TestCase {
 
     protected static array $dirs = [];
+    protected Markdown $markdown;
 
     final function __construct($name = null, array $data = [], $dataName = '') {
         self::$dirs = static::initDirs();
-        $this->Parsedown = $this->initParsedown();
+        $this->markdown = $this->initMarkdown();
 
         parent::__construct($name, $data, $dataName);
     }
-
-    protected $Parsedown;
 
     /**
      * @return array
@@ -33,7 +32,7 @@ class ParsedownTest extends TestCase {
     /**
      * @return Markdown
      */
-    protected function initParsedown(): Markdown {
+    protected function initMarkdown(): Markdown {
         return new Markdown();
     }
 
@@ -52,9 +51,9 @@ class ParsedownTest extends TestCase {
         $expectedMarkup = str_replace("\r", "\n", $expectedMarkup);
         $expectedMarkup = rtrim($expectedMarkup);
 
-        $this->Parsedown->setSafeMode(str_starts_with($test, 'xss'));
+        $this->markdown->setSafeMode(str_starts_with($test, 'xss'));
 
-        $actualMarkup = $this->Parsedown->text($markdown);
+        $actualMarkup = $this->markdown->text($markdown);
 
         $this->assertEquals($expectedMarkup, $actualMarkup);
     }
@@ -165,25 +164,25 @@ color: red;
 <p>&lt;!-- html comment --&gt;</p>
 EXPECTED_HTML;
 
-        $parsedownWithNoMarkup = new Markdown();
-        $parsedownWithNoMarkup->setMarkupEscaped(true);
-        $this->assertEquals($expectedHtml, $parsedownWithNoMarkup->text($markdownWithHtml));
+        $markdownWithNoMarkup = new Markdown();
+        $markdownWithNoMarkup->setMarkupEscaped(true);
+        $this->assertEquals($expectedHtml, $markdownWithNoMarkup->text($markdownWithHtml));
     }
 
     public function testLateStaticBinding(): void {
-        $parsedown = Markdown::instance();
-        $this->assertInstanceOf(Markdown::class, $parsedown);
+        $markdown = Markdown::instance();
+        $this->assertInstanceOf(Markdown::class, $markdown);
 
-        // After instance is already called on Parsedown
+        // After instance is already called on Markdown
         // subsequent calls with the same arguments return the same instance
-        $sameParsedown = Markdown::instance();
-        $this->assertInstanceOf(Markdown::class, $sameParsedown);
-        $this->assertSame($parsedown, $sameParsedown);
+        $sameMarkdown = Markdown::instance();
+        $this->assertInstanceOf(Markdown::class, $sameMarkdown);
+        $this->assertSame($markdown, $sameMarkdown);
 
-        $testParsedown = Markdown::instance('test late static binding');
-        $this->assertInstanceOf(Markdown::class, $testParsedown);
+        $testMarkdown = Markdown::instance('test late static binding');
+        $this->assertInstanceOf(Markdown::class, $testMarkdown);
 
         $sameInstanceAgain = Markdown::instance('test late static binding');
-        $this->assertSame($testParsedown, $sameInstanceAgain);
+        $this->assertSame($testMarkdown, $sameInstanceAgain);
     }
 }

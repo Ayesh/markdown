@@ -5,14 +5,14 @@ namespace Ayesh\Markdown\Tests;
 require_once(__DIR__ . '/CommonMarkStrictTest.php');
 
 /**
- * Test Parsedown against the CommonMark spec, but less aggressive
+ * Test Markdown against the CommonMark spec, but less aggressive
  *
  * The resulting HTML markup is cleaned up before comparison, so examples
  * which would normally fail due to actually invisible differences (e.g.
  * superfluous whitespaces), don't fail. However, cleanup relies on block
  * element detection. The detection doesn't work correctly when a element's
  * `display` CSS property is manipulated. According to that this test is only
- * a interim solution on Parsedown's way to full CommonMark compatibility.
+ * a interim solution on Markdown's way to full CommonMark compatibility.
  *
  * @link http://commonmark.org/ CommonMark
  */
@@ -22,7 +22,7 @@ class CommonMarkWeakTest extends CommonMarkStrictTest {
     protected function setUp(): void {
         parent::setUp();
 
-        $textLevelElements = $this->parsedown->getTextLevelElements();
+        $textLevelElements = $this->markdown->getTextLevelElements();
         array_walk($textLevelElements, function (&$element) {
             $element = preg_quote($element, '/');
         });
@@ -40,7 +40,7 @@ class CommonMarkWeakTest extends CommonMarkStrictTest {
     public function testExample($id, $section, $markdown, $expectedHtml): void {
         $expectedHtml = $this->cleanupHtml($expectedHtml);
 
-        $actualHtml = $this->parsedown->text($markdown);
+        $actualHtml = $this->markdown->text($markdown);
         $actualHtml = $this->cleanupHtml($actualHtml);
 
         $this->assertEquals($expectedHtml, $actualHtml);

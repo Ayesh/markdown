@@ -6,18 +6,17 @@ use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
 /**
- * Test Parsedown against the CommonMark spec
+ * Test Markdown against the CommonMark spec
  *
  * @link http://commonmark.org/ CommonMark
  */
 class CommonMarkStrictTest extends TestCase {
-    const SPEC_URL = 'https://raw.githubusercontent.com/jgm/CommonMark/master/spec.txt';
-
-    protected $parsedown;
+    protected const string SPEC_URL = 'https://raw.githubusercontent.com/jgm/CommonMark/master/spec.txt';
+    protected $markdown;
 
     protected function setUp(): void {
-        $this->parsedown = new TestParsedown();
-        $this->parsedown->setUrlsLinked(false);
+        $this->markdown = new TestMarkdown();
+        $this->markdown->setUrlsLinked(false);
     }
 
     /**
@@ -29,7 +28,7 @@ class CommonMarkStrictTest extends TestCase {
      * @param $expectedHtml
      */
     public function testExample($id, $section, $markdown, $expectedHtml): void {
-        $actualHtml = $this->parsedown->text($markdown);
+        $actualHtml = $this->markdown->text($markdown);
         $this->assertEquals($expectedHtml, $actualHtml);
     }
 
