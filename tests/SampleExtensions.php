@@ -5,7 +5,7 @@ namespace Ayesh\Markdown\Tests;
 use Ayesh\Markdown\Markdown;
 
 class UnsafeExtension extends Markdown {
-    protected function blockFencedCodeComplete($Block) {
+    protected function blockFencedCodeComplete($Block): array {
         $text = $Block['element']['element']['text'];
         unset($Block['element']['element']['text']);
 
@@ -22,7 +22,7 @@ class UnsafeExtension extends Markdown {
 
 
 class TrustDelegatedExtension extends Markdown {
-    protected function blockFencedCodeComplete($Block) {
+    protected function blockFencedCodeComplete($Block): array {
         $text = $Block['element']['element']['text'];
         unset($Block['element']['element']['text']);
 
