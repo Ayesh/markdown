@@ -188,7 +188,7 @@ class Markdown {
         return trim($markup, "\n");
     }
 
-    public function setBreaksEnabled($breaksEnabled): static {
+    public function setBreaksEnabled(bool $breaksEnabled): static {
         $this->breaksEnabled = $breaksEnabled;
         return $this;
     }
