@@ -1,4 +1,5 @@
 ## Test {#my-test-title}
+##{my-new-title} Test
 
 
 >{.my-custom-class}
