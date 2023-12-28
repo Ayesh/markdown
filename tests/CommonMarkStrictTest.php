@@ -2,7 +2,6 @@
 
 namespace Ayesh\Markdown\Tests;
 
-use Ayesh\Markdown\Markdown;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 
