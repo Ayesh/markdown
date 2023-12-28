@@ -164,7 +164,7 @@ EXPECTED_HTML;
 
         $markdownWithNoMarkup = new Markdown();
         $markdownWithNoMarkup->setMarkupEscaped(true);
-        $this->assertEquals($expectedHtml, $markdownWithNoMarkup->text($markdownWithHtml));
+        $this->assertEquals(str_replace("\r\n", "\n", $expectedHtml), $markdownWithNoMarkup->text($markdownWithHtml));
     }
 
     public function testLateStaticBinding(): void {
