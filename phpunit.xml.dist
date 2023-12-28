@@ -11,7 +11,11 @@
          failOnWarning="true">
     <testsuites>
         <testsuite name="default">
-            <directory>tests</directory>
+            <file>tests/MarkdownTest.php</file>
+        </testsuite>
+        <testsuite name="commonmark">
+            <file>tests/CommonMarkStrictTest.php</file>
+            <file>tests/CommonMarkWeakTest.php</file>
         </testsuite>
     </testsuites>
 
