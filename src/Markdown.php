@@ -728,7 +728,7 @@ class Markdown {
     #
     # Setext
 
-    protected function blockSetextHeader($Line, array $Block = null) {
+    protected function blockSetextHeader($Line, ?array $Block = null) {
         if (!isset($Block) || isset($Block['type']) || isset($Block['interrupted'])) {
             return;
         }
@@ -845,7 +845,7 @@ class Markdown {
     #
     # Table
 
-    protected function blockTable($Line, array $Block = null) {
+    protected function blockTable($Line, ?array $Block = null) {
         if (!isset($Block) || isset($Block['type']) || isset($Block['interrupted'])) {
             return;
         }
