@@ -1,6 +1,6 @@
 {
     "name": "ayesh/markdown",
-    "description": "Form of Parsedown with leaner code base, optimized for modern PHP.",
+    "description": "Fork of Parsedown with leaner code base, optimized for modern PHP.",
     "type": "library",
     "require": {
         "php": "^8.3",
