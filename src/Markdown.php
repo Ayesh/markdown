@@ -1130,6 +1130,15 @@ class Markdown {
             $text = $matches[2];
             $text = preg_replace("/ *\n/", ' ', $text);
 
+            if (isset($text[0]) && $text[0] ==='^') {
+                $codexText = substr($text, 1);
+                $el = $this->inlineLink([
+                    'text' => '[`' . $codexText. '`](%codex%/' . $codexText . ')',
+                ]);
+                $el['extent'] = strlen($matches[0]);
+                return $el;
+            }
+
             return [
                 'extent' => strlen($matches[0]),
                 'element' => [
