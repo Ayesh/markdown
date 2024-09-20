@@ -31,7 +31,6 @@ use function substr_replace;
 use function trim;
 
 class Markdown {
-    public const string version = '2.0.0';
     protected bool $breaksEnabled = false;
     protected bool $markupEscaped = false;
     protected bool $urlsLinked = true;
