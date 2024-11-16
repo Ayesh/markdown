@@ -5,7 +5,7 @@ on:
   push:
   workflow_dispatch:
   schedule:
-    - cron: "28 6 3,10,16,25 * *"
+    - cron: "28 6 3,16 * *"
 
 jobs:
   tests:
