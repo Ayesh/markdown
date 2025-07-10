@@ -1,7 +1,8 @@
 # Markdown
 Fork of [`erusev/parsedown`](https://github.com/erusev/parsedown) with modernized code base, maintained, and made even faster with micro-optimizations.
 
-This project was forked from Parsedown 1.7.4, and has been maintained since. It tries to keep feature parity with Parsedown, but this project favors code maintainability, modern PHP features, security and performance.
+This project was forked from Parsedown 1.7.4, and has been maintained since. It tries to keep feature parity with
+Parsedown, but this project favors code maintainability, modern PHP features, security and performance.
 
  - Uses modern PHP features such as [typed class constants](https://php.watch/versions/8.3/typed-constants), [typed properties](https://php.watch/versions/7.4/typed-properties), and several `preg_` and other string inspect/manipulation functions with [`str_contains`](https://php.watch/versions/8.0/str_contains), [`str_starts_with`](https://php.watch/versions/8.0/str_starts_with-str_ends_with), ['str_ends_with`](https://php.watch/versions/8.0/str_starts_with-str_ends_with), etc.
  - Supports and requires [PHP 8.3](https://php.watch/versions/8.3)
@@ -16,7 +17,7 @@ This project was forked from Parsedown 1.7.4, and has been maintained since. It 
 
 This library offers an opinionated list of markup improvements compared to the Common Mark spec: 
 
-### Custom Header Support
+## Custom Header Support
 
 Parsedown does not support header anchor tags. This library provides header anchors using this syntax:
 
@@ -29,3 +30,8 @@ This yields:
 ```html
 <h2 id="my-title"><a href="#my-title" class="anchor">My Title</a></h2>
 ```
+
+## Image lazy loading
+
+All the images, unless their URL ends with `#cover`, will get `loading=lazy` and `decode=asnc` attributes
+added to them.
