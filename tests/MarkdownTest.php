@@ -4,6 +4,7 @@ namespace Ayesh\Markdown\Tests;
 
 use Ayesh\Markdown\Markdown;
 use DirectoryIterator;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class MarkdownTest extends TestCase {
@@ -11,20 +12,10 @@ class MarkdownTest extends TestCase {
     protected static array $dirs = [];
     protected Markdown $markdown;
 
-    final public function __construct($name = null, array $data = [], $dataName = '') {
-        self::$dirs = static::initDirs();
-        $this->markdown = $this->initMarkdown();
-
-        parent::__construct($name, $data, $dataName);
-    }
-
-    /**
-     * @return array
-     */
-    protected static function initDirs(): array {
-        $dirs [] = __DIR__ . '/data/';
-
-        return $dirs;
+    protected static function getDirs(): array {
+        return [
+            __DIR__ . '/data/',
+        ];
     }
 
     /**
@@ -34,24 +25,19 @@ class MarkdownTest extends TestCase {
         return new Markdown();
     }
 
-    /**
-     * @dataProvider data
-     *
-     * @param $test
-     * @param $dir
-     */
-    public function testFixtures($test, $dir): void {
+    #[DataProvider('data')]
+    public function testFixtures(string $test, string $dir): void {
         $markdown = file_get_contents($dir . $test . '.md');
 
         $expectedMarkup = file_get_contents($dir . $test . '.html');
 
-        $expectedMarkup = str_replace("\r\n", "\n", $expectedMarkup);
-        $expectedMarkup = str_replace("\r", "\n", $expectedMarkup);
+        $expectedMarkup = str_replace(["\r\n", "\r"], "\n", $expectedMarkup);
         $expectedMarkup = rtrim($expectedMarkup);
 
-        $this->markdown->setSafeMode(str_starts_with($test, 'xss'));
+        $processor = new Markdown();
+        $processor->setSafeMode(str_starts_with($test, 'xss'));
 
-        $actualMarkup = $this->markdown->text($markdown);
+        $actualMarkup = $processor->text($markdown);
 
         $this->assertEquals($expectedMarkup, $actualMarkup);
     }
@@ -90,7 +76,7 @@ class MarkdownTest extends TestCase {
 
     public static function data(): array {
         $data = [];
-        $dirs = static::initDirs();
+        $dirs = self::getDirs();
 
         foreach ($dirs as $dir) {
             $Folder = new DirectoryIterator($dir);
