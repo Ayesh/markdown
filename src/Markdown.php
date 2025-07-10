@@ -1233,36 +1233,40 @@ class Markdown {
             ],
         ];
 
+        if (str_ends_with($Link['element']['attributes']['href'], '#cover')) {
+            $Inline['element']['attributes']['loading'] = 'eager';
+        }
+
         $Inline['element']['attributes'] += $Link['element']['attributes'];
 
         unset($Inline['element']['attributes']['href']);
 
-        if (!empty($Inline['element']['attributes']['title'])) {
-            return [
-                'extent' => $Link['extent'] + 1,
-                'element' => [
-                    'name' => 'figure',
-                    'handler' => 'elements',
-                    'text' => [
-                        [
-                            'name' => 'img',
-                            'attributes' => [
-                                'src' => $Link['element']['attributes']['href'],
-                                'alt' => $Link['element']['text'],
-                                'loading' => 'lazy',
-                                'decoding' => 'async',
-                            ],
-                        ],
-                        [
-                            'name' => 'figcaption',
-                            'text' => $Inline['element']['attributes']['title'],
-                        ],
-                    ],
-                ],
-            ];
+        if (empty($Inline['element']['attributes']['title'])) {
+            return $Inline;
         }
 
-        return $Inline;
+        return [
+            'extent' => $Link['extent'] + 1,
+            'element' => [
+                'name' => 'figure',
+                'handler' => 'elements',
+                'text' => [
+                    [
+                        'name' => 'img',
+                        'attributes' => [
+                            'src' => $Link['element']['attributes']['href'],
+                            'alt' => $Link['element']['text'],
+                            'loading' => str_ends_with($Link['element']['attributes']['href'], '#cover') ? 'eager' : 'lazy',
+                            'decoding' => 'async',
+                        ],
+                    ],
+                    [
+                        'name' => 'figcaption',
+                        'text' => $Inline['element']['attributes']['title'],
+                    ],
+                ],
+            ],
+        ];
     }
 
     protected function inlineLink($Excerpt) {
