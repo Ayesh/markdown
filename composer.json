@@ -3,11 +3,11 @@
     "description": "Fork of Parsedown with leaner code base, optimized for modern PHP.",
     "type": "library",
     "require": {
-        "php": "^8.3",
+        "php": "^8.4",
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "^12.2.6"
+        "phpunit/phpunit": "^12.3.8"
     },
     "autoload": {
         "psr-4": {
